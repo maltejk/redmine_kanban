@@ -1,0 +1,55 @@
+hr:
+  kanban_title: Kanban
+  kanban_text_incoming: Novi
+  kanban_text_backlog: Lista čekanja
+  kanban_text_selected_requests: U pripremi
+  kanban_text_quick_tasks: Kratki predmeti
+  kanban_text_user: Korisnik
+  kanban_text_active: U izradi
+  kanban_text_testing: U testu
+  kanban_text_finished_requests: Završeni
+  kanban_text_canceled_requests: Odbačeni
+  kanban_text_general_settings: Osnovne postavke
+  kanban_text_pane_settings: Postavke ploče
+  kanban_text_pane_settings_description: "Odaberite status predmeta koji želite povezati sa svakim stupcem. Predmeti će biti ažurirani u odabrane status prilikom odnošenja u odgovarajući stupac."
+  kanban_text_general_help: "Svaki popis/stupac je dio ploče.  Predmeti se mogu premještati na druge stupce ovisno o postavkama dozvola za vašu ulogu."
+  kanban_text_general_help: "Each list is a Pane of issues.  The issues can be dragged and dropped onto other panes based on Roles and Permissions settings."
+  kanban_text_sync: "Sync"
+  kanban_label_incoming_pane: Novi
+  kanban_label_backlog_pane: Lista čekanja
+  kanban_label_selected-requests_pane: U pripremi
+  kanban_label_selected_pane: Predmeti u pripremi
+  kanban_label_quick-tasks_pane: Kratki predmeti
+  kanban_label_active_pane: U izradi
+  kanban_label_testing_pane: U testu
+  kanban_label_finished_pane: Završeni
+  kanban_label_canceled_pane: Odbačeni
+  kanban_label_limit: Maksimalni broj predmeta
+  kanban_label_day_limit: Broj dana
+  kanban_label_staff_role: Uloga za "Staffed" predmete
+  kanban_label_incoming_project: Projekti za prikaz u stupcu Novi
+  kanban_text_error_saving: Error saving lists.  Please refresh the page and try again.
+  kanban_text_notice_sync: Kanban liste su sinhronizirane.
+  kanban_text_saved: Ažurirane liste.
+  field_state: "Stanje"
+  kanban_text_nothing: "(Nema predmeta)"
+  kanban_text_color_help: "Pomoć - o bojama"
+  kanban_text_normal_color: "Normal - <span>žuta</span>"
+  kanban_text_assigned_to_me_color: "Dodijeljen meni - <span>zelena</span>"
+  kanban_text_behind_schedule_color: "Prije roka - <span>narandžasta</span>"
+  kanban_text_overdue_color: "Iza roka - <span>crvena</span>"
+  kanban_text_over_wip_color: "Prekoračen max. broj istovremenih poslova - <span>sivo tijelo predmeta</span>"
+  kanban_text_parent_issue_color: "Glavni predmet - <span>Podebljani naslov</span>"
+  kanban_text_updated_issue: "Predmet je ažuriran"
+  kanban_text_workflow_settings: "Postavke hodograma"
+  kanban_label_incoming_priority_change: "Novi: mora se promijeniti prioritet predmeta kad"
+  kanban_label_incoming_project_change: "Novi: mora se promijeniti projekt kad"
+  kanban_label_incoming_url: "Novi: Url poveznice naslova/zaglavlja stupca Novi"
+  kanban_text_workflow_settings_description: "Ograničenja za premještanje predmeta sa ploče."
+  text_my_kanban_requests_title: "Moji Kanban predmeti"
+  text_user_kanban_requests_title: "Kanban predmeti za {{user}}"
+  text_kanban_board: "Kanban ploča"
+  label_user_switch: "Zamijeni korisnika"
+  kanban_label_management_group: "Grupa za upravljanje"
+  kanban_text_management_group_help: "Grupa koja može upravljati korisničkim pločama. Koristi se na ploči 'Moji kanban predmeti'."
+
