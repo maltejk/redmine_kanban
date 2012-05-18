@@ -241,12 +241,14 @@ jQuery(function($) {
       var issue_update = '';
     }
 
+    var token = $('meta[name="csrf-token"]').attr('content');
+
     // Only fire the Ajax requests if from_pane is set (cross list DnD) or
-    // the new order has the tagert issue (same list DnD)
+    // the new order has the target issue (same list DnD)
     if (from_pane.length > 0 || to_order.indexOf(issue_id) > 0) {
 
       $.ajaxQueue.put('kanban.js', {
-        data: 'issue_id=' + issue_id + '&from=' + from_pane + '&to=' + to_pane + '&' + from_order + '&' + to_order + '&from_user_id=' + from_user_id + '&to_user_id=' + to_user_id + '&additional_pane=' + additional_pane_name + '&' + issue_update,
+        data: 'authenticity_token=' + token + '&issue_id=' + issue_id + '&from=' + from_pane + '&to=' + to_pane + '&' + from_order + '&' + to_order + '&from_user_id=' + from_user_id + '&to_user_id=' + to_user_id + '&additional_pane=' + additional_pane_name + '&' + issue_update,
         success: function(response) {
           var partials = $.secureEvalJSON(response);
           $(from).parent().html(partials.from);
