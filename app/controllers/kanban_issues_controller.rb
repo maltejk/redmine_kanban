@@ -62,7 +62,7 @@ class KanbanIssuesController < ApplicationController
       format.js {
         # Redmine only uses a single template so render that template to a
         # string first, then embed that string into our custom template. Meta!
-        @core_content = render_to_string(:layout => false, :template => 'issues/show.rhtml')
+        @core_content = render_to_string(:layout => false, :template => 'issues/show.html.erb')
         render :layout => false
       }
     end
