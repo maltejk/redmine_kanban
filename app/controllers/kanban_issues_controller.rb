@@ -44,11 +44,11 @@ class KanbanIssuesController < ApplicationController
   def show
     @project = @issue.project
     # journals/aaj compatiblity
-    if ChiliProject::Compatibility.using_acts_as_journalized?
-      @journals = @issue.journals.find(:all, :include => [:user], :order => "#{Journal.table_name}.created_at ASC")
-    else
+    #if ChiliProject::Compatibility.using_acts_as_journalized?
+    #  @journals = @issue.journals.find(:all, :include => [:user], :order => "#{Journal.table_name}.created_at ASC")
+    #else
       @journals = @issue.journals.find(:all, :include => [:user, :details], :order => "#{Journal.table_name}.created_on ASC")
-    end
+    #end
     @journals.reverse! if User.current.wants_comments_in_reverse_order?
     @changesets = @issue.changesets.visible.all
     @changesets.reverse! if User.current.wants_comments_in_reverse_order?
