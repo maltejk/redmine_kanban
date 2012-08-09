@@ -21,12 +21,13 @@ class KanbanIssuesController < ApplicationController
   def new
     @issue = Issue.new(:status => IssueStatus.default)
     @issue.author_login = User.current.login if @issue.respond_to?(:author_login)
-    valid_incoming_projects_conditions = ARCondition.new(Project.allowed_to_condition(User.current, :add_issues))
+    valid_incoming_projects_scope = User.current.projects.scoped(:conditions => Project.allowed_to_condition(User.current, :add_issues))
+    
     if @settings['panes'].present? && @settings['panes']['incoming'].present? && @settings['panes']['incoming']['excluded_projects'].present?
-      valid_incoming_projects_conditions.add(["#{Project.table_name}.id IN (?)", @settings['panes']['incoming']['excluded_projects']])
+      valid_incoming_projects_scope = valid_incoming_projects_scope.scoped :conditions => ["#{Project.table_name}.id IN (?)", @settings['panes']['incoming']['excluded_projects']]
     end
                                                          
-    @allowed_projects = User.current.projects.all(:conditions => valid_incoming_projects_conditions.conditions)
+    @allowed_projects = valid_incoming_projects_scope.all
                                                    
     @project = @allowed_projects.detect {|p| p.id.to_s == params[:issue][:project_id]} if params[:issue] && params[:issue][:project_id]
     @project ||= @allowed_projects.first
@@ -63,7 +64,7 @@ class KanbanIssuesController < ApplicationController
       format.js {
         # Redmine only uses a single template so render that template to a
         # string first, then embed that string into our custom template. Meta!
-        @core_content = render_to_string(:layout => false, :template => 'issues/show.rhtml')
+        @core_content = render_to_string(:layout => false, :template => 'issues/show.html.erb')
         render :layout => false
       }
     end
