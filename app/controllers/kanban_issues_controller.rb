@@ -16,6 +16,7 @@ class KanbanIssuesController < ApplicationController
   helper :journals
   helper :issue_relations
   helper :timelog
+  helper :crm_templates if defined?(CrmTemplatesHelper)
   
   def new
     @issue = Issue.new(:status => IssueStatus.default)
@@ -44,7 +45,7 @@ class KanbanIssuesController < ApplicationController
   def show
     @project = @issue.project
     # journals/aaj compatiblity
-    if ChiliProject::Compatibility.using_acts_as_journalized?
+    if defined?(ChiliProject) && ChiliProject::Compatibility.using_acts_as_journalized?
       @journals = @issue.journals.find(:all, :include => [:user], :order => "#{Journal.table_name}.created_at ASC")
     else
       @journals = @issue.journals.find(:all, :include => [:user, :details], :order => "#{Journal.table_name}.created_on ASC")
