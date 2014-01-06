@@ -44,11 +44,11 @@ class KanbanIssuesController < ApplicationController
   def show
     @project = @issue.project
     # journals/aaj compatiblity
-    if ChiliProject::Compatibility.using_acts_as_journalized?
-      @journals = @issue.journals.find(:all, :include => [:user], :order => "#{Journal.table_name}.created_at ASC")
-    else
+    #if ChiliProject::Compatibility.using_acts_as_journalized?
+    #  @journals = @issue.journals.find(:all, :include => [:user], :order => "#{Journal.table_name}.created_at ASC")
+    #else
       @journals = @issue.journals.find(:all, :include => [:user, :details], :order => "#{Journal.table_name}.created_on ASC")
-    end
+    #end
     @journals.reverse! if User.current.wants_comments_in_reverse_order?
     @changesets = @issue.changesets.visible.all
     @changesets.reverse! if User.current.wants_comments_in_reverse_order?
@@ -62,7 +62,7 @@ class KanbanIssuesController < ApplicationController
       format.js {
         # Redmine only uses a single template so render that template to a
         # string first, then embed that string into our custom template. Meta!
-        @core_content = render_to_string(:layout => false, :template => 'issues/show.rhtml')
+        @core_content = render_to_string(:layout => false, :template => 'issues/show.html.erb')
         render :layout => false
       }
     end
