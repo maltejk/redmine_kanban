@@ -5,20 +5,15 @@ require 'aasm'
 require "block_helpers"
 
 # Patches to the Redmine core.
-require 'dispatcher'
+require 'dispatcher' unless Rails::VERSION::MAJOR >= 3
 
-Dispatcher.to_prepare :redmine_kanban do
-
-  require_dependency 'user_preference'
-  UserPreference.send(:include, RedmineKanban::Patches::UserPreferencePatch)
-
-  require_dependency 'principal'
-  Principal.send(:include, RedmineKanban::Patches::PrincipalPatch)
-  require_dependency 'issue'
-  # Guards against including the module multiple time (like in tests)
-  # and registering multiple callbacks
-  unless Issue.included_modules.include? RedmineKanban::IssuePatch
-    Issue.send(:include, RedmineKanban::IssuePatch)
+if Rails::VERSION::MAJOR >= 3
+  ActionDispatch::Callbacks.to_prepare do
+    require_dependency 'redminekanban_patches'
+  end
+else
+  Dispatcher.to_prepare :redmine_kanban do
+    require_dependency 'redminekanban_patches'
   end
 end
 
