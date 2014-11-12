@@ -45,28 +45,28 @@ class KanbanIssue < ActiveRecord::Base
 
   # Named with a find_ prefix because of the name conflict with the
   # state transitions.
-  named_scope :find_selected, lambda {
+  scope :find_selected, lambda {
     {
       :order => 'position ASC',
       :conditions => { :user_id => nil, :state => 'selected'}
     }
   }
 
-  named_scope :find_active, lambda {
+  scope :find_active, lambda {
     {
       :order => "#{KanbanIssue.table_name}.user_id ASC, position ASC",
       :conditions => { :state => 'active'}
     }
   }
 
-  named_scope :find_testing, lambda {
+  scope :find_testing, lambda {
     {
       :order => "#{KanbanIssue.table_name}.user_id ASC, position ASC",
       :conditions => { :state => 'testing'}
     }
   }
 
-  named_scope :assigned, lambda {|user_id|
+  scope :assigned, lambda {|user_id|
     # Unknown users
     if user_id && user_id <= 0
       user_id = nil
@@ -76,14 +76,14 @@ class KanbanIssue < ActiveRecord::Base
     }
   }
 
-  named_scope :authored, lambda {|user_id|
+  scope :authored, lambda {|user_id|
     {
       :conditions => ["#{Issue.table_name}.author_id = ?", user_id],
       :include => :issue
     }
   }
 
-  named_scope :for_projects, lambda { |projects|
+  scope :for_projects, lambda { |projects|
     project_ids = projects.collect(&:id)
 
     {
