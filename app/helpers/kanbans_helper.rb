@@ -4,7 +4,7 @@ module KanbansHelper
   end
 
   def jquery_dialog_div(title=:field_issue)
-    "<div id='dialog-window' title='#{ l(title) }'></div>"
+    "<div id='dialog-window' title='#{ l(title) }'></div>".html_safe
   end
 
   def render_pane_to_js(pane, user=nil)
