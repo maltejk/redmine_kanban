@@ -47,21 +47,21 @@ class KanbanIssue < ActiveRecord::Base
   # state transitions.
   scope :find_selected, lambda {
     {
-      :order => 'position ASC',
+      :order => "#{KanbanIssue.table_name}.position ASC",
       :conditions => { :user_id => nil, :state => 'selected'}
     }
   }
 
   scope :find_active, lambda {
     {
-      :order => "#{KanbanIssue.table_name}.user_id ASC, position ASC",
+      :order => "#{KanbanIssue.table_name}.user_id ASC, #{KanbanIssue.table_name}.position ASC",
       :conditions => { :state => 'active'}
     }
   }
 
   scope :find_testing, lambda {
     {
-      :order => "#{KanbanIssue.table_name}.user_id ASC, position ASC",
+      :order => "#{KanbanIssue.table_name}.user_id ASC, #{KanbanIssue.table_name}.position ASC",
       :conditions => { :state => 'testing'}
     }
   }
