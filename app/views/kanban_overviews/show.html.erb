@@ -18,7 +18,9 @@
 <div id="kanban" class="kanban-overview" style="width: 100%">
   <div class="kanban-headers horizontal-lane">
     <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:project) %>%"><%= content_tag(:h3, l(:label_project)) %></div>
+    <% if KanbanPane::TestingPane.configured? %>
     <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:testing) %>%"><%= content_tag(:h3, l(:kanban_text_testing)) %></div>
+    <% end %>
     <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:active) %>%"><%= content_tag(:h3, l(:kanban_text_active)) %></div>
     <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:selected) %>%"><%= content_tag(:h3, l(:kanban_text_selected_requests)) %></div>
     <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:backlog) %>%"><%= content_tag(:h3, l(:kanban_text_backlog)) %></div>
@@ -41,6 +43,7 @@
       <h4 class="user-name"><%= avatar(user, :size => 12) %> <%= h(user.name) %></h4>
     </div>
 
+    <% if KanbanPane::TestingPane.configured? %>
     <div id="kanban-overview-show-testing-project-<%= project.id -%>-user-<%= user.id %>" class="pane equal-column" style="width: <%= my_kanban_column_width(:testing)%>%">
       <%= kanban_remote_data(kanban_kanban_overviews_path(:user => user.id,
                                                           :project => project.identifier,
@@ -48,6 +51,7 @@
                                                           :format => 'js'),
                              "kanban-overview-show-testing-project-#{project.id}-user-#{user.id}") %>
     </div>
+    <% end %>
     <div id="kanban-overview-show-active-project-<%= project.id -%>-user-<%= user.id %>" class="pane equal-column" style="width: <%= my_kanban_column_width(:active)%>%">
       <%= kanban_remote_data(kanban_kanban_overviews_path(:user => user.id,
                                                           :project => project.identifier,
