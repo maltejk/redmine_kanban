@@ -8,7 +8,6 @@ require "block_helpers"
 require 'dispatcher' unless Rails::VERSION::MAJOR >= 3
 
 if Rails::VERSION::MAJOR >= 3
-  require_dependency 'ar_condition'
   ActionDispatch::Callbacks.to_prepare do
     require_dependency 'redminekanban_patches'
   end
