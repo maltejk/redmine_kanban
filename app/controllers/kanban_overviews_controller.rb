@@ -18,7 +18,7 @@ class KanbanOverviewsController < ApplicationController
     # TODO: check user params/visibility
     @user = User.find_by_id(params[:user]) || User.current
     @kanban.user = @user if @user.present?
-    project = Project.visible.find(params[:project]) if params[:project].present?
+    project = Project.visible.find_by_name(params[:project]) if params[:project].present?
 
     respond_to do |format|
       format.html {}
