@@ -1,10 +1,13 @@
 require File.dirname(__FILE__) + '/../test_helper'
+require 'shoulda'
 
 class KanbanIssueTest < ActiveSupport::TestCase
   def shared_setup
     @project = Project.generate!
-    @issue = Issue.generate!(:project => @project, :tracker => @project.trackers.first)
-    @user = User.generate_with_protected!
+    @project.trackers << Tracker.generate!(:name => "Some tracker")
+    @priority = medium_priority
+    @issue = Issue.custom_generate!(:project => @project, :tracker => @project.trackers.first, :priority => @priority)
+    @user = User.generate!
     @role = make_kanban_role
     
     @member = Member.generate!({
@@ -14,10 +17,10 @@ class KanbanIssueTest < ActiveSupport::TestCase
     @kanban_issue = KanbanIssue.new(:issue => @issue, :user => @user, :state => "none", :position => 1)
   end
 
-  should_validate_presence_of :position
+  should validate_presence_of :position
 
-  should_belong_to :issue
-  should_belong_to :user
+  should belong_to :issue
+  should belong_to :user
 
   context 'state' do
     should 'use aasm' do
@@ -138,7 +141,7 @@ class KanbanIssueTest < ActiveSupport::TestCase
     context 'to a status with a kanban status' do
       should 'create a new KanbanIssue if there is not one already' do
         assert_difference('KanbanIssue.count') do
-          @issue = Issue.generate!(:tracker => @public_project.trackers.first,
+          @issue = Issue.custom_generate!(:tracker => @public_project.trackers.first,
                               :project => @public_project,
                               :status => IssueStatus.find_by_name('Selected'))
         end
@@ -176,7 +179,7 @@ class KanbanIssueTest < ActiveSupport::TestCase
 
     should 'return true' do
       @public_project = Project.generate!(:is_public => true)
-      issue = Issue.generate!(:tracker => @public_project.trackers.first,
+      issue = Issue.custom_generate!(:tracker => @public_project.trackers.first,
                          :project => @public_project)
 
       assert KanbanIssue.update_from_issue(issue)

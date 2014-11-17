@@ -1,8 +1,54 @@
 # Load the normal Rails helper
-require File.expand_path(File.dirname(__FILE__) + '/../../../../test/test_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../../test/test_helper')
 
-# Ensure that we are using the temporary fixture path
-Engines::Testing.set_fixture_path
+if Rails::VERSION::MAJOR < 3
+  # Ensure that we are using the temporary fixture path
+  Engines::Testing.set_fixture_path
+else
+ # class ActiveSupport::TestCase
+ #   self.fixture_path = File.dirname(__FILE__) + '/fixtures'
+ # end
+  def User.generate_with_protected! (attributes={})
+    User.generate!(attributes)
+  end
+  def Issue.custom_generate! (attributes={})
+    attributes[:priority] ||= IssuePriority.all.first
+    attributes[:author] ||= User.current
+    attributes[:project] ||= Projects.all.first
+    attributes[:tracker] ||= attributes[:project].trackers.first 
+    attributes[:status] ||= IssueStatus.default
+    Issue.generate!(attributes)
+  end
+  def KanbanIssue.generate! (attributes={})
+    kanbanIssue = KanbanIssue.new(attributes)
+    yield kanbanIssue if block_given?
+    kanbanIssue.save!
+    kanbanIssue
+  end
+  def Member.generate! (attributes={})
+    member = Member.new(attributes)
+    yield member if block_given?
+    member.save!
+    member
+  end
+  def Issue.generate_for_project! (project, attributes={})
+    attributes_dup = attributes.dup
+    attributes_dup[:project] = project
+    Issue.custom_generate!(attributes_dup)
+  end
+  def IssueStatus.generate! (attributes={})
+    issueStatus = IssueStatus.new(attributes)
+    yield issueStatus if block_given?
+    issueStatus.save!
+    issueStatus
+  end
+  def IssuePriority.generate! (attributes={})
+    issuePriority = IssuePriority.new(attributes)
+    yield issuePriority if block_given?
+    issuePriority.save!
+    issuePriority
+  end
+end
 
 require 'faker'
 
@@ -14,7 +60,7 @@ end
 
 module KanbanTestHelper
   def make_issue_statuses
-    @new_status = IssueStatus.find_by_name('New') || IssueStatus.generate!(:name => 'New')
+    @new_status = IssueStatus.find_by_name('New') || IssueStatus.generate!(:name => 'New', :is_default => 1)
     @unstaffed_status = IssueStatus.find_by_name('Unstaffed') || IssueStatus.generate!(:name => 'Unstaffed')
     @selected_status = IssueStatus.find_by_name('Selected') || IssueStatus.generate!(:name => 'Selected')
     @active_status = IssueStatus.find_by_name('Active') || IssueStatus.generate!(:name => 'Active')
@@ -34,8 +80,8 @@ module KanbanTestHelper
     role = make_kanban_role
     @users = []
     count.times do
-      user = User.generate_with_protected!
-      Member.generate!({:principal => user, :project => @public_project, :roles => [role]})
+      user = User.generate!
+      Member.create!({:principal => user, :project => @public_project, :roles => [role]})
       @users << user
     end
   end
@@ -126,9 +172,13 @@ module KanbanTestHelper
 
   def setup_kanban_issues
     @private_project = Project.generate!(:is_public => false)
-    @private_tracker = @private_project.trackers.first
+    @private_tracker = Tracker.where(:name => "Feature").first
+    @private_tracker ||= Tracker.generate!(:name => "Feature")
+    @private_project.trackers << @private_tracker unless @private_project.trackers.include?(@private_tracker)
     @public_project = Project.generate!(:is_public => true)
-    @public_tracker = @public_project.trackers.first
+    @public_tracker = Tracker.where(:name => "Bug").first
+    @public_tracker ||= Tracker.generate!(:name => "Bug")
+    @public_project.trackers << @public_tracker unless @public_project.trackers.include?(@public_tracker)
 
     @hidden_project = Project.find_by_name('Hidden')
     @hidden_project ||= Project.generate!(:is_public => true, :name => 'Hidden')
@@ -188,13 +238,13 @@ module KanbanTestHelper
   def setup_incoming_issues
     # Incoming
     5.times do
-      Issue.generate!(:tracker => @private_tracker,
+      Issue.custom_generate!(:tracker => @private_tracker,
                  :project => @private_project,
                  :status => @new_status)
     end
 
     6.times do
-      Issue.generate!(:tracker => @public_tracker,
+      Issue.custom_generate!(:tracker => @public_tracker,
                  :project => @public_project,
                  :status => @new_status)
     end
@@ -203,7 +253,7 @@ module KanbanTestHelper
   def setup_quick_issues
     # Quick tasks
     4.times do
-      Issue.generate!(:tracker => @public_tracker,
+      Issue.custom_generate!(:tracker => @public_tracker,
                  :project => @public_project,
                  :priority => high_priority,
                  :status => @unstaffed_status,
@@ -211,7 +261,7 @@ module KanbanTestHelper
     end
 
     1.times do
-      Issue.generate!(:tracker => @public_tracker,
+      Issue.custom_generate!(:tracker => @public_tracker,
                  :project => @public_project,
                  :priority => medium_priority,
                  :status => @unstaffed_status,
@@ -219,7 +269,7 @@ module KanbanTestHelper
     end
 
     2.times do
-      Issue.generate!(:tracker => @public_tracker,
+      Issue.custom_generate!(:tracker => @public_tracker,
                  :project => @public_project,
                  :priority => low_priority,
                  :status => @unstaffed_status,
@@ -231,7 +281,7 @@ module KanbanTestHelper
   def setup_backlog_issues
     # Backlog tasks
     5.times do
-      Issue.generate!(:tracker => @public_tracker,
+      Issue.custom_generate!(:tracker => @public_tracker,
                  :project => @public_project,
                  :priority => high_priority,
                  :status => @unstaffed_status,
@@ -239,7 +289,7 @@ module KanbanTestHelper
     end
 
     7.times do
-      Issue.generate!(:tracker => @public_tracker,
+      Issue.custom_generate!(:tracker => @public_tracker,
                  :project => @public_project,
                  :priority => medium_priority,
                  :status => @unstaffed_status,
@@ -247,7 +297,7 @@ module KanbanTestHelper
     end
 
     5.times do
-      Issue.generate!(:tracker => @public_tracker,
+      Issue.custom_generate!(:tracker => @public_tracker,
                  :project => @public_project,
                  :priority => low_priority,
                  :status => @unstaffed_status,
@@ -259,7 +309,7 @@ module KanbanTestHelper
   def setup_selected_issues
     # Selected tasks
     10.times do
-      Issue.generate!(:tracker => @public_tracker,
+      Issue.custom_generate!(:tracker => @public_tracker,
                  :project => @public_project,
                  :status => @selected_status)
     end
@@ -284,7 +334,7 @@ module KanbanTestHelper
     # Testing tasks
     @users.each do |user|
       5.times do
-        Issue.generate!(:tracker => @public_tracker,
+        Issue.custom_generate!(:tracker => @public_tracker,
                    :project => @public_project,
                    :assigned_to => user,
                    :status => @testing_status)
@@ -297,14 +347,14 @@ module KanbanTestHelper
     # Finished tasks
     @users.each do |user|
       5.times do
-        Issue.generate!(:tracker => @public_tracker,
+        Issue.custom_generate!(:tracker => @public_tracker,
                    :project => @public_project,
                    :status => @finished_status,
                    :assigned_to => user)
       end
 
       # Extra issues that should not show up
-      Issue.generate!(:tracker => @public_tracker,
+      Issue.custom_generate!(:tracker => @public_tracker,
                  :project => @public_project,
                  :status => @hidden_status,
                  :assigned_to => user)
@@ -316,7 +366,7 @@ module KanbanTestHelper
     # Finished tasks
     @users.each do |user|
       2.times do
-        Issue.generate!(:tracker => @public_tracker,
+        Issue.custom_generate!(:tracker => @public_tracker,
                    :project => @public_project,
                    :status => @canceled_status,
                    :assigned_to => user)
@@ -330,14 +380,14 @@ module KanbanTestHelper
   # assigned but somehow didn't as the result of bad data.
   def setup_unknown_user_issues
     3.times do
-      i = Issue.generate!(:tracker => @public_tracker,
+      i = Issue.custom_generate!(:tracker => @public_tracker,
                      :project => @public_project,
                      :assigned_to => nil,
                      :status => @active_status)
     end
 
     4.times do
-      i = Issue.generate!(:tracker => @public_tracker,
+      i = Issue.custom_generate!(:tracker => @public_tracker,
                      :project => @public_project,
                      :assigned_to => nil,
                      :status => @testing_status)

@@ -106,7 +106,7 @@ class KanbanTest < ActiveSupport::TestCase
       
       should "only get all active issues" do
         assert_equal 5, @kanban.active_issues.size # Users + Unknown
-        assert_equal 18, @kanban.active_issues.values.collect.flatten.size # Issues
+        assert_equal 18, @kanban.active_issues.values.flatten.size # Issues
       end
 
       should "only get issues with the configured Active status" do
@@ -133,7 +133,7 @@ class KanbanTest < ActiveSupport::TestCase
       
       should "only get all testing issues" do
         assert_equal 5, @kanban.testing_issues.size # Users + Unknow
-        assert_equal 19, @kanban.testing_issues.values.collect.flatten.size # Issues
+        assert_equal 19, @kanban.testing_issues.values.flatten.size # Issues
       end
 
       should "only get issues with the configured Testing status" do
@@ -211,7 +211,7 @@ class KanbanTest < ActiveSupport::TestCase
     context "with a new KanbanIssue" do
       should "create a new KanbanIssue" do
         KanbanIssue.destroy_all
-        issue = Issue.generate!({
+        issue = Issue.custom_generate!({
                              :tracker => @public_project.trackers.first,
                              :project => @public_project
                            })
@@ -229,7 +229,7 @@ class KanbanTest < ActiveSupport::TestCase
 
     context "with an existing KanbanIssue" do
       setup {
-        @issue = Issue.generate!({
+        @issue = Issue.custom_generate!({
                              :tracker => @public_project.trackers.first,
                              :project => @public_project
                            })
@@ -269,7 +269,7 @@ class KanbanTest < ActiveSupport::TestCase
 
       @public_project2 = Project.generate!(:is_public => true)
       @new_tracker = @public_project2.trackers.first
-      @issue = Issue.generate!(:tracker => @public_project.trackers.first,
+      @issue = Issue.custom_generate!(:tracker => @public_project.trackers.first,
                           :project => @public_project,
                           :priority => @high_priority,
                           :status => IssueStatus.find_by_name('New'))

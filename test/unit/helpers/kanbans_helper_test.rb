@@ -1,6 +1,7 @@
 require File.dirname(__FILE__) + '/../../test_helper'
 
-class KanbansHelperTest < HelperTestCase
+class KanbansHelperTest < ActionView::TestCase
+#class KanbansHelperTest < HelperTestCase
   include ApplicationHelper
   include KanbansHelper
   include ActionView::Helpers::TextHelper
