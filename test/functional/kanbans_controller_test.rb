@@ -59,12 +59,12 @@ class KanbansControllerTest < ActionController::TestCase
       get :show
     }
 
-    should_assign_to :settings
-    should_assign_to :kanban
+    should assign_to :settings
+    should assign_to :kanban
 
-    should_respond_with :success
-    should_render_template :show
-    should_not_set_the_flash
+    should respond_with :success
+    should render_template :show
+    should_not set_the_flash
   
     should "render nested lists for the backlog" do
       assert_select("ol#backlog-issues") do
@@ -103,9 +103,9 @@ class KanbansControllerTest < ActionController::TestCase
         put :update, {}
       }
 
-      should_respond_with :redirect
-      should_redirect_to("main page") { kanban_path }
-      should_set_the_flash_to /error/i
+      should respond_with :redirect
+      should redirect_to("main page") { kanban_path }
+      should set_the_flash.to(/error/i)
     end
 
     context "from Incoming to Backlog for an issue" do
@@ -123,8 +123,8 @@ class KanbansControllerTest < ActionController::TestCase
         put :update, {:from => @from, :to => @to, :issue_id => @issue.id}
       }
 
-      should_redirect_to("main page") { kanban_path }
-      should_set_the_flash_to /updated/i
+      should redirect_to("main page") { kanban_path }
+      should set_the_flash.to(/updated/i)
 
       should "update the issue status to 'to'" do
         @issue.reload
@@ -178,9 +178,9 @@ class KanbansControllerTest < ActionController::TestCase
               }})
       }
       
-      should_respond_with :success
-      should_assign_to :settings
-      should_assign_to :kanban
+      should respond_with :success
+      should assign_to :settings
+      should assign_to :kanban
 
       should "update the issue status to 'to'" do
         @issue.reload
@@ -224,9 +224,9 @@ class KanbansControllerTest < ActionController::TestCase
         put :sync
       end
       
-      should_respond_with :redirect
-      should_set_the_flash_to /sync/i
-      should_redirect_to("main page") { kanban_path }
+      should respond_with :redirect
+      should set_the_flash.to /sync/i
+      should redirect_to("main page") { kanban_path }
     end
 
     should "update outdated selected records" do

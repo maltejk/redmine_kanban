@@ -221,7 +221,7 @@ module KanbansHelper
       sub(/https?:\/\//,''). # Protocol
       sub(/\?.*/,'') # Query string
     begin
-      route = ActionController::Routing::Routes.recognize_path(link_path, :method => :get)
+      route = RedmineApp::Application.routes.recognize_path(link_path, :method => :get)
       if route[:controller] == 'projects' && route[:id]
         project = Project.find(route[:id])
       end
