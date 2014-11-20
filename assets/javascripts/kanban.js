@@ -52,6 +52,7 @@ jQuery(function($) {
       cancel: 'a',
       connectWith: [
         '#selected-issues.allowed',
+        '#backlog-issues',
         '.active-issues.allowed',
         '.testing-issues.allowed',
         '.finished-issues.allowed',
@@ -65,6 +66,12 @@ jQuery(function($) {
                              {
                                'additional_pane': '#quick-issues'
                              });
+      },
+      update: function (event, ui) {
+        // Allow drag and drop inside the list
+        if (ui.sender == null && event.target == this) {
+          updatePanes(ui.item,ui.sender,$(this), {});
+        }
       }
     });
 
