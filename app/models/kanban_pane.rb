@@ -48,8 +48,8 @@ class KanbanPane
   # false - no, do not reverse
   # nil - no preference
   def self.check_user_preference_for_pane_order
-    if User.current.logged? && User.current.pref.present?
-      User.current.pref.kanban_reverse_pane_order
+    if User.current.logged? && User.current.preference.present?
+      User.current.preference.kanban_reverse_pane_order
     end
   end
 

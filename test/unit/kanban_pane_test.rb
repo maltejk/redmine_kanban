@@ -1,8 +1,13 @@
 require File.dirname(__FILE__) + '/../test_helper'
+require 'debugger'
 
 class KanbanPaneTest < ActiveSupport::TestCase
 
   context "#pane_order" do
+    setup do
+      User.current = nil
+    end
+
     context "with standard pane order" do
       should "list the panes" do
         reconfigure_plugin({'reverse_pane_order' => '0'})
@@ -32,6 +37,7 @@ class KanbanPaneTest < ActiveSupport::TestCase
     
     should 'be true when the pane order reverse setting is set' do
       reconfigure_plugin({'reverse_pane_order' => '1'})
+      debugger
       assert KanbanPane.pane_order_reversed?
     end
     
