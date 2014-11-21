@@ -167,7 +167,6 @@ module KanbanTestHelper
   end
 
   def reconfigure_plugin(configuration_change)
-    debugger
     Setting['plugin_redmine_kanban'] = Setting['plugin_redmine_kanban'].merge(configuration_change)
   end
 

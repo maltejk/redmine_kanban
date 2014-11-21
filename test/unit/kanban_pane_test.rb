@@ -6,6 +6,7 @@ class KanbanPaneTest < ActiveSupport::TestCase
   context "#pane_order" do
     setup do
       User.current = nil
+      User.anonymous.preference.destroy unless (!User.anonymous.nil?) && User.anonymous.preference.nil?
     end
 
     context "with standard pane order" do
@@ -28,6 +29,7 @@ class KanbanPaneTest < ActiveSupport::TestCase
   context "#pane_order_reversed?" do
     setup do
       User.current = nil
+      User.anonymous.preference.destroy unless (!User.anonymous.nil?) && User.anonymous.preference.nil?
     end
     
     should 'be false when the pane order reverse setting is not set' do
@@ -37,7 +39,6 @@ class KanbanPaneTest < ActiveSupport::TestCase
     
     should 'be true when the pane order reverse setting is set' do
       reconfigure_plugin({'reverse_pane_order' => '1'})
-      debugger
       assert KanbanPane.pane_order_reversed?
     end
     
