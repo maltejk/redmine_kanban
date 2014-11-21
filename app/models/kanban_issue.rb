@@ -23,24 +23,24 @@ class KanbanIssue < ActiveRecord::Base
 
   # States
   include AASM
-  aasm_column :state
-  aasm_initial_state :none
+  aasm :column => :state do
 
-  aasm_state :none
-  aasm_state :selected, :enter => :remove_user
-  aasm_state :active
-  aasm_state :testing
+    state :none, :initial => true
+    state :selected, :before_enter => :remove_user
+    state :active
+    state :testing
 
-  aasm_event :selected do
-    transitions :to => :selected, :from => [:none, :active, :testing]
-  end
+    event :selected do
+      transitions :to => :selected, :from => [:none, :active, :testing]
+    end
 
-  aasm_event :active do
-    transitions :to => :active, :from => [:none, :selected, :testing]
-  end
+    event :active do
+      transitions :to => :active, :from => [:none, :selected, :testing]
+    end
 
-  aasm_event :testing do
-    transitions :to => :testing, :from => [:none, :selected, :active]
+    event :testing do
+      transitions :to => :testing, :from => [:none, :selected, :active]
+    end
   end
 
   # Named with a find_ prefix because of the name conflict with the

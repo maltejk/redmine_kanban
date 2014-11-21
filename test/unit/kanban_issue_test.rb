@@ -28,19 +28,19 @@ class KanbanIssueTest < ActiveSupport::TestCase
     end
 
     should 'have a none state' do
-      assert KanbanIssue.aasm_states.collect(&:name).include?(:none)
+      assert KanbanIssue.aasm.states.collect(&:name).include?(:none)
     end
 
     should 'have a selected state' do
-      assert KanbanIssue.aasm_states.collect(&:name).include?(:selected)
+      assert KanbanIssue.aasm.states.collect(&:name).include?(:selected)
     end
 
     should 'have an active state' do
-      assert KanbanIssue.aasm_states.collect(&:name).include?(:active)
+      assert KanbanIssue.aasm.states.collect(&:name).include?(:active)
     end
 
     should 'have a testing state' do
-      assert KanbanIssue.aasm_states.collect(&:name).include?(:testing)
+      assert KanbanIssue.aasm.states.collect(&:name).include?(:testing)
     end
 
   end
