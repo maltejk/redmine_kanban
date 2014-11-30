@@ -31,8 +31,9 @@ class KanbanIssuesControllerTest < ActionController::TestCase
       }
 
       should ":edit_kanban" do
-        get :edit, :format => 'js'
-        assert_response 404
+        issue = Issue.generate_for_project!(@public_project)
+        get :edit, :id => issue.id, :format => 'js'
+        assert_response 403
       end
     end
 
@@ -44,7 +45,8 @@ class KanbanIssuesControllerTest < ActionController::TestCase
     end
     
     should "not be allowed" do
-      get :edit
+      issue = Issue.generate_for_project!(@public_project)
+      get :edit, :id => issue.id
       assert_response 404
     end
   end
@@ -55,9 +57,10 @@ class KanbanIssuesControllerTest < ActionController::TestCase
     end
 
     context "without an issue id" do
-      should "return a 404" do
-        get :edit, :format => 'js'
-        assert_response 404
+      should "raise RoutingError" do
+        assert_raise ActionController::RoutingError do
+          get :edit, :format => 'js'
+        end
       end
     end
 
