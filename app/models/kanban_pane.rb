@@ -4,7 +4,7 @@ class KanbanPane
   end
 
   def self.settings
-    Setting['plugin_redmine_kanban']
+    Setting.plugin_redmine_kanban
   end
 
   def get_issues(options={})

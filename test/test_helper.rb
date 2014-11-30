@@ -97,7 +97,7 @@ module KanbanTestHelper
 
   def make_kanban_role
     @kanban_role = Role.find_by_name('KanbanRole')
-    @kanban_role = Role.generate!(:name => 'KanbanRole', :permissions => [:view_issues]) if @kanban_role.nil?
+    @kanban_role = Role.generate!(:name => 'KanbanRole', :permissions => [:view_issues, :move_issues]) if @kanban_role.nil?
     @kanban_role
   end
 
@@ -167,7 +167,7 @@ module KanbanTestHelper
   end
 
   def reconfigure_plugin(configuration_change)
-    Setting['plugin_redmine_kanban'] = Setting['plugin_redmine_kanban'].merge(configuration_change)
+    Setting.plugin_redmine_kanban = Setting.plugin_redmine_kanban.merge(configuration_change)
   end
 
   def setup_kanban_issues
@@ -194,7 +194,7 @@ module KanbanTestHelper
   def high_priority
     unless @high_priority
       @high_priority = IssuePriority.find_by_name("High")
-      @high_priority ||= IssuePriority.generate!(:name => "High", :type => 'IssuePriority', :position => 1)
+      @high_priority ||= IssuePriority.generate!(:name => "High", :type => 'IssuePriority', :position => 4)
     end
     @high_priority
   end
@@ -203,7 +203,7 @@ module KanbanTestHelper
   def medium_priority
     unless @medium_priority
       @medium_priority = IssuePriority.find_by_name("Medium")
-      @medium_priority ||= IssuePriority.generate!(:name => "Medium", :type => 'IssuePriority', :position => 2)
+      @medium_priority ||= IssuePriority.generate!(:name => "Medium", :type => 'IssuePriority', :position => 3)
     end
     @medium_priority
   end
@@ -211,7 +211,7 @@ module KanbanTestHelper
   def low_priority
     unless @low_priority
       @low_priority = IssuePriority.find_by_name("Low")
-      @low_priority ||= IssuePriority.generate!(:name => "Low", :type => 'IssuePriority', :position => 3)
+      @low_priority ||= IssuePriority.generate!(:name => "Low", :type => 'IssuePriority', :position => 2)
     end
     @low_priority
   end
@@ -219,7 +219,7 @@ module KanbanTestHelper
   def hidden_priority
     unless @priority_hidden_from_incoming
       @priority_hidden_from_incoming = IssuePriority.find_by_name("Hidden")
-      @priority_hidden_from_incoming ||= IssuePriority.generate!(:name => "Hidden", :type => 'IssuePriority', :position => 4)
+      @priority_hidden_from_incoming ||= IssuePriority.generate!(:name => "Hidden", :type => 'IssuePriority', :position => 1)
     end
     @priority_hidden_from_incoming
 

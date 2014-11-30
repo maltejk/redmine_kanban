@@ -6,7 +6,7 @@ class KanbanPane::QuickPane < KanbanPane
     conditions = conditions.scoped :conditions  => "estimated_hours IS null"
 
     issues = conditions.all(:limit => settings['panes']['quick-tasks']['limit'],
-                            :order => "#{RedmineKanban::KanbanCompatibility::IssuePriority.klass.table_name}.position ASC, #{Issue.table_name}.created_on ASC",
+                            :order => "#{RedmineKanban::KanbanCompatibility::IssuePriority.klass.table_name}.position DESC, #{Issue.table_name}.created_on ASC",
                             :include => :priority)
 
     return group_by_priority_position(issues)

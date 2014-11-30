@@ -11,13 +11,13 @@ class KanbansHelperTest < ActionView::TestCase
     super
     # Stub KanbanPane#settings so it will bypass the Settings cache.
     def KanbanPane.settings
-      return Setting['plugin_redmine_kanban']
+      return Setting.plugin_redmine_kanban
     end
   end
 
   def enable_pane(pane)
-    new_panes = Setting['plugin_redmine_kanban']['panes'].merge({pane.to_s => {'status' => '1'}})
-    reconfigure_plugin(Setting['plugin_redmine_kanban'].merge('panes' => new_panes))
+    new_panes = Setting.plugin_redmine_kanban['panes'].merge({pane.to_s => {'status' => '1'}})
+    reconfigure_plugin(Setting.plugin_redmine_kanban.merge('panes' => new_panes))
   end
 
   context "#column_width" do
