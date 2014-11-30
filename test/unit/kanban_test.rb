@@ -258,7 +258,9 @@ class KanbanTest < ActiveSupport::TestCase
   context "#update_issue_attributes" do
     setup {
       shared_setup
+      configure_plugin
       setup_kanban_issues
+      Member.generate!({:principal => @user, :project => @public_project, :roles => [make_kanban_role]})
       @from = "incoming"
       @to = "active"
       @high_priority = IssuePriority.find_by_name("High")
