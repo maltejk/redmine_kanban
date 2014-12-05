@@ -3,7 +3,8 @@ class KanbanPane::QuickPane < KanbanPane
     return {} if missing_settings('quick-tasks', :skip_status => true) || missing_settings('backlog')
 
     conditions = Issue.visible.scoped :conditions => ["status_id = ?", settings['panes']['backlog']['status']]
-    conditions = conditions.scoped :conditions  => "estimated_hours IS null"
+    conditions = conditions.scoped :conditions  => "estimated_hours IS null or estimated_hours <= 2"
+    conditions << " AND #{Project.table_name}.status = 1"
 
     issues = conditions.all(:limit => settings['panes']['quick-tasks']['limit'],
                             :order => "#{RedmineKanban::KanbanCompatibility::IssuePriority.klass.table_name}.position DESC, #{Issue.table_name}.created_on ASC",

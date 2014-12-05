@@ -14,6 +14,7 @@ class KanbanPane::BacklogPane < KanbanPane
     conditions << " AND #{Issue.table_name}.id NOT IN (:excluded_ids)" unless exclude_ids.empty?
     conditions = merge_for_option_conditions(conditions, for_option) if user.present?
     conditions << " AND #{Issue.table_name}.project_id IN (:project_ids) " if restrict_to_project_ids.present?
+    conditions << " AND #{Project.table_name}.status = 1"
 
     issues = Issue.visible.all(:limit => limit,
                                :order => "#{RedmineKanban::KanbanCompatibility::IssuePriority.klass.table_name}.position DESC, #{Issue.table_name}.created_on ASC",

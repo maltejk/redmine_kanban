@@ -11,6 +11,7 @@ class KanbanPane::IncomingPane < KanbanPane
     conditions << "status_id = :status"
     conditions << " AND #{Issue.table_name}.id NOT IN (:excluded_ids)" unless exclude_ids.empty?
     conditions = merge_for_option_conditions(conditions, for_option) if user.present?
+    conditions << " AND #{Project.table_name}.status = 1"
     
     return Issue.visible.
       all(:limit => limit,
