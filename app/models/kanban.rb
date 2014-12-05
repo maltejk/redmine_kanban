@@ -201,7 +201,8 @@ class Kanban
         #@users = User.active.all(:conditions => query_conditions.conditions,
         @users = query_scope.all(
                           :select => "users.*",
-                          :joins => "LEFT  JOIN members ON members.user_id = users.id LEFT  JOIN projects ON projects.id = members.project_id LEFT  JOIN member_roles ON (members.id = member_roles.member_id) LEFT  JOIN roles ON (roles.id = member_roles.role_id) LEFT  JOIN member_roles member_roles_members ON member_roles_members.member_id = members.id")
+                          :joins => "LEFT  JOIN members ON members.user_id = users.id LEFT  JOIN projects ON projects.id = members.project_id LEFT  JOIN member_roles ON (members.id = member_roles.member_id) LEFT  JOIN roles ON (roles.id = member_roles.role_id) LEFT  JOIN member_roles member_roles_members ON member_roles_members.member_id = members.id",
+                          :order => "users.firstname, users.lastname ")
       end
       @users ||= []
       @users = move_current_user_to_front

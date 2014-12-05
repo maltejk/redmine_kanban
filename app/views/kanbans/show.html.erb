@@ -35,14 +35,14 @@
 
   <% if KanbanPane::QuickPane.configured? || KanbanPane::SelectedPane.configured? %>
     <div id="selected-requests" class="selected equal-column pane" style="width: <%= column_width(:selected) %>%">
-    <% if KanbanPane::QuickPane.configured? %>
-      <div id="quick-tasks" class="inner-pane">
-        <%= render :partial => 'quick' %>
-      </div>
-    <% end %>
     <% if KanbanPane::SelectedPane.configured? %>
       <div id="selected-tasks"class="inner-pane">
         <%= render :partial => 'selected' %>
+      </div>
+    <% end %>
+    <% if KanbanPane::QuickPane.configured? %>
+      <div id="quick-tasks" class="inner-pane">
+        <%= render :partial => 'quick' %>
       </div>
     <% end %>
     </div>

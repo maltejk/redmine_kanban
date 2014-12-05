@@ -9,7 +9,7 @@ class KanbanIssue < ActiveRecord::Base
   acts_as_list
 
   delegate :project, :to => :issue, :allow_nil => true
-  
+
   # For acts_as_list
   def scope_condition
     if user_id
@@ -48,7 +48,7 @@ class KanbanIssue < ActiveRecord::Base
   scope :find_selected, lambda {
     {
       :order => "#{KanbanIssue.table_name}.position ASC",
-      :conditions => { :user_id => nil, :state => 'selected'}
+      :conditions => { :state => 'selected'}
     }
   }
 
@@ -130,7 +130,7 @@ class KanbanIssue < ActiveRecord::Base
     all(:conditions => [conditions, {:user => user_id}],
         :include => [:issue => :watchers])
   end
-  
+
   def remove_user
     self.user = nil
     save!
@@ -154,7 +154,7 @@ class KanbanIssue < ActiveRecord::Base
         # assigned into the Unknown User
         kanban_issue.user = issue.assigned_to
       end
-      
+
       return kanban_issue.save
     else
       KanbanIssue.destroy_all(['issue_id = ?', issue.id])
