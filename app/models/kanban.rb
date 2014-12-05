@@ -143,7 +143,7 @@ class Kanban
     backlog_issues_found = backlog_issues(backlog_issues_additional_options)
 
     issues = filter_issues(backlog_issues_found, :project => project, :user => user)
-    issues = issues.sort_by(&:priority) if issues.present?
+    issues = issues.sort_by(&:priority).reverse if issues.present?
 
     # Fill the backlog issues until the plugin limit
     if fill_backlog && issues.length < @settings['panes']['backlog']['limit'].to_i
@@ -163,7 +163,7 @@ class Kanban
         fill_issues = filter_issues(backlog_issues_with_fill, :project => project, :user => nil)
         # Sort by priority but appended to existing issues
         # [High, Med, Low] + [High, Med, Low], not [High, High, Med, Med, Low, Low]
-        fill_issues = fill_issues.sort_by(&:priority)
+        fill_issues = fill_issues.sort_by(&:priority).reverse
         issues += fill_issues
       end
       
