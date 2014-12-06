@@ -17,8 +17,8 @@ class KanbanPane::BacklogPane < KanbanPane
     conditions << " AND #{Project.table_name}.status = 1"
 
     issues = Issue.visible.all(:limit => limit,
-                               :order => "#{RedmineKanban::KanbanCompatibility::IssuePriority.klass.table_name}.position DESC, #{Issue.table_name}.created_on ASC",
-                               :include => [:priority, :watchers],
+                               :order => "#{RedmineKanban::KanbanCompatibility::IssuePriority.klass.table_name}.position ASC, #{Issue.table_name}.created_on ASC",
+                               :include => [:priority, :project, :watchers],
                                :conditions => [conditions, {
                                                  :status => settings['panes']['backlog']['status'],
                                                  :excluded_ids => exclude_ids,

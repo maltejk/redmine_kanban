@@ -4,11 +4,11 @@ class KanbanPane::QuickPane < KanbanPane
 
     conditions = Issue.visible.scoped :conditions => ["status_id = ?", settings['panes']['backlog']['status']]
     conditions = conditions.scoped :conditions  => "estimated_hours IS null or estimated_hours <= 2"
-    conditions << " AND #{Project.table_name}.status = 1"
 
     issues = conditions.all(:limit => settings['panes']['quick-tasks']['limit'],
-                            :order => "#{RedmineKanban::KanbanCompatibility::IssuePriority.klass.table_name}.position DESC, #{Issue.table_name}.created_on ASC",
-                            :include => :priority)
+                           :order => "#{RedmineKanban::KanbanCompatibility::IssuePriority.klass.table_name}.position ASC, #{Issue.table_name}.created_on ASC",
+                            :conditions => ["#{Project.table_name}.status = 1", {}],
+                            :include => [:priority, :project])
 
     return group_by_priority_position(issues)
   end

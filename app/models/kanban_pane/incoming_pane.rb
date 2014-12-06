@@ -16,7 +16,7 @@ class KanbanPane::IncomingPane < KanbanPane
     return Issue.visible.
       all(:limit => limit,
           :order => "#{Issue.table_name}.created_on ASC",
-          :include => :watchers,
+          :include => [:watchers, :project],
           :conditions => [conditions, {
                             :status => settings['panes']['incoming']['status'],
                             :excluded_ids => exclude_ids,
