@@ -25,7 +25,7 @@ class AssignedKanbansController < ApplicationController
       end
     end
 
-    project = Project.visible.find_by_name(params[:project]) if params[:project].present? rescue nil
+    project = Project.visible.find_by_identifier(params[:project]) if params[:project].present? rescue nil
 
     respond_to do |format|
       format.html {}
