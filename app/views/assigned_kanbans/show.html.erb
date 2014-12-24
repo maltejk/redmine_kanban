@@ -76,7 +76,7 @@
         <% end %>
       </div>
 
-  <div style="clear:left;"> </div>
+      <div style="clear:left;"> </div>
     </div>
     <% ordered_panes(:only => [:backlog, :selected, :active, :testing]).each do |pane_name| %>
       <div id="assigned-kanban-show-<%= pane_name -%>-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(pane_name.to_sym)%>%">
