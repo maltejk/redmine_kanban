@@ -215,7 +215,7 @@ class Kanban
   # Find all of the projects referenced on the KanbanIssue and Issues
   def projects
     unless @projects
-      @projects = Project.all(:conditions => Project.allowed_to_condition(User.current, :view_issues))
+      @projects = Project.active.all(:conditions => Project.allowed_to_condition(User.current, :view_issues))
       # User isn't a member but they created an issue which was moved out of their visibility
       @projects += Project.all(:include => :issues,
                                :conditions => ["#{Issue.table_name}.author_id = :user AND #{Project.table_name}.id NOT IN (:found_projects)", {:user => User.current.id, :found_projects => @projects.collect(&:id)}])
