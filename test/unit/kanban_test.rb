@@ -404,4 +404,71 @@ class KanbanTest < ActiveSupport::TestCase
     
     should "be tested"
   end
+
+  context "#projects" do
+    setup {
+      shared_setup
+      configure_plugin
+      setup_kanban_issues
+      non_member_role = Role.non_member
+      non_member_role.permissions << :view_issues
+      non_member_role.save!
+    }
+
+    context "normal user" do
+      context "without membership (non-member has view_issues permission)" do
+
+        should "get all public projects (even the incoming ones)" do
+          @kanban = Kanban.new
+          assert_equal 2, @kanban.projects.count
+          assert_contains @kanban.projects, @public_project
+          assert_contains @kanban.projects, @hidden_project
+        end
+        
+        context "when public closed projects exist" do
+          setup {
+            @closed_project = Project.generate!(:is_public => true)
+            @closed_project.trackers << @private_tracker unless @closed_project.trackers.include?(@private_tracker)
+            @closed_project.trackers << @public_tracker unless @closed_project.trackers.include?(@public_tracker)
+            @closed_project.close
+            @kanban = Kanban.new      
+          }
+
+          should "see no closed projects" do
+            assert !@kanban.projects.include?(@closed_project), "@kanban.projects(#{@kanban.projects.to_s}) contains closed project #{@closed_project.to_s}"
+            assert_equal 2, @kanban.projects.count
+          end
+          
+          context "and closed project has issue authored by user" do
+            setup {
+              @issue = Issue.custom_generate!({
+                             :tracker => @closed_project.trackers.first,
+                             :project => @closed_project,
+                             :author => @user
+                           })
+            }
+
+            should "see no closed project" do
+              debugger
+              assert !@kanban.projects.include?(@closed_project), "@kanban.projects(#{@kanban.projects.to_s}) contains closed project #{@closed_project.to_s}"
+              assert_equal 2, @kanban.projects.count
+            end
+          end
+        end
+      end
+
+      context "with membership on private project" do 
+        setup {
+          Member.generate!({:principal => @user, :project => @private_project, :roles => [@kanban_role]})
+          @kanban = Kanban.new
+        }
+
+        should "see that also" do
+          assert_equal 3, @kanban.projects.count
+          assert_contains @kanban.projects, @private_project
+        end
+      end
+
+    end
+  end
 end
