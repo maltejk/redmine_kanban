@@ -15,6 +15,7 @@ class KanbanIssuesController < ApplicationController
   helper :attachments
   helper :journals
   helper :issue_relations
+  helper :repositories
   helper :timelog
   helper :crm_templates if defined?(CrmTemplatesHelper)
   
@@ -64,8 +65,9 @@ class KanbanIssuesController < ApplicationController
       format.js {
         # Redmine only uses a single template so render that template to a
         # string first, then embed that string into our custom template. Meta!
-        @core_content = render_to_string(:layout => false, :template => 'issues/show.html.erb')
-        render :layout => false
+        @core_content = render_to_string(:layout => false, :template => 'issues/show', :formats => [:html], :handlers => [:erb])
+        debugger
+        render :layout => false, :template => 'show.html.erb'
       }
     end
 
