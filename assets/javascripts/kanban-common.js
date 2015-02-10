@@ -64,13 +64,14 @@
         click(function() {
 
         issueId = '';
+        url = $(this).attr('href');
         $.each($(this).attr('class').split(' '), function(index, cssClass) {
           if (cssClass.match('issue-id-')) {
             issueId = cssClass.replace('issue-id-','')
           }
         });
 
-        $.get('/issues/' + issueId, function( data ) {
+        $.get(url, function( data ) {
             data = $(data).find('#content').html();
             $('#dialog-window').
             html(data).
