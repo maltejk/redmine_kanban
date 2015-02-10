@@ -70,11 +70,13 @@
           }
         });
 
-        $('#dialog-window').
-          html('').
-          load('/kanban_issues/' + issueId + '.js').
-          dialog("option", "width", $('#content').width()). // Set width to the content width
-          dialog('open');
+        $.get('/issues/' + issueId, function( data ) {
+            data = $(data).find('#content').html();
+            $('#dialog-window').
+            html(data).
+            dialog("option", "width", $('#content').width()). // Set width to the content width
+            dialog('open');
+        });
 
         return false;
       }).addClass('issue-show-popup-registered');
