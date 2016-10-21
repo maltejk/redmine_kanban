@@ -4,19 +4,19 @@ if Rails::VERSION::MAJOR >= 3
       put :sync, :on => :member
       
       resources :user_kanbans do
-        match 'users' => 'user_kanbans#index'
+        match 'users' => 'user_kanbans#index', :via => [:get, :post]
       end
       resource :user_kanbans do
-        match 'my-requests' => 'user_kanbans#show'
+        match 'my-requests' => 'user_kanbans#show', :via => [:get, :post]
       end
       resources :assigned_kanbans do
-        match 'assigned-to' => 'assigned_kanbans#index'
+        match 'assigned-to' => 'assigned_kanbans#index', :via => [:get, :post]
       end
       resource :assigned_kanbans, :only => [:show] do
-        match 'my-assigned' => 'assigned_kanbans#show'
+        match 'my-assigned' => 'assigned_kanbans#show', :via => [:get, :post]
       end
       resource :kanban_overviews, :only => [:show] do
-        match 'overview' => 'kanban_overviews#show'
+        match 'overview' => 'kanban_overviews#show', :via => [:get, :post]
       end
     end
     resources :kanban_issues
